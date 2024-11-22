@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .tree {
+            position: relative;
+            width: 100px;
+            margin: 50px auto;
+        }
+
+        .tree-part {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 70px solid #2d5a27;
+            position: relative;
+            margin-bottom: -30px;
+        }
+
+        .tree-part:nth-child(2) {
+            border-bottom-color: #1a4121;
+            transform: scale(0.8);
+        }
+
+        .tree-part:nth-child(3) {
+            border-bottom-color: #0f2817;
+            transform: scale(0.6);
+        }
+
+        .trunk {
+            width: 20px;
+            height: 40px;
+            background: #3d2817;
+            margin: 0 auto;
+        }
+
+        .ornament {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: red;
+            animation: sparkle 1.5s infinite;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .tree-part:nth-child(1) .ornament:nth-child(1) { left: -20px; top: 30px; background: #ff0; }
+        .tree-part:nth-child(1) .ornament:nth-child(2) { right: -20px; top: 20px; background: #f00; }
+        .tree-part:nth-child(1) .ornament:nth-child(3) { left: 0px; top: 40px; background: #00f; }
+        .tree-part:nth-child(1) .ornament:nth-child(4) { right: 0px; top: 10px; background: #ff69b4; }
+        .tree-part:nth-child(1) .ornament:nth-child(5) { left: -10px; top: 15px; background: #fff; }
+
+        .tree-part:nth-child(2) .ornament:nth-child(1) { left: -10px; top: 25px; background: #00f; }
+        .tree-part:nth-child(2) .ornament:nth-child(2) { right: -15px; top: 30px; background: #ff0; }
+        .tree-part:nth-child(2) .ornament:nth-child(3) { left: 5px; top: 15px; background: #f00; }
+        .tree-part:nth-child(2) .ornament:nth-child(4) { right: 5px; top: 20px; background: #fff; }
+
+        .tree-part:nth-child(3) .ornament:nth-child(1) { right: -5px; top: 15px; background: #ff0; }
+        .tree-part:nth-child(3) .ornament:nth-child(2) { left: -5px; top: 25px; background: #f00; }
+        .tree-part:nth-child(3) .ornament:nth-child(3) { right: 5px; top: 10px; background: #00f; }
+
+        .star {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #FFD700;
+            font-size: 24px;
+        }
+
+        .garland {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: blink 1s infinite alternate;
+        }
+
+        @keyframes blink {
+            from { opacity: 0.4; }
+            to { opacity: 1; }
+        }
+
+        .tree-part:nth-child(1) .garland:nth-child(6) { left: -30px; top: 45px; background: #ff0; animation-delay: 0.1s; }
+        .tree-part:nth-child(1) .garland:nth-child(7) { left: -15px; top: 50px; background: #f00; animation-delay: 0.2s; }
+        .tree-part:nth-child(1) .garland:nth-child(8) { right: -15px; top: 50px; background: #0f0; animation-delay: 0.3s; }
+        .tree-part:nth-child(1) .garland:nth-child(9) { right: -30px; top: 45px; background: #00f; animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="tree">
+        <div class="star">★</div>
+        <div class="tree-part">
+            <div class="ornament"></div>
+            <div class="ornament"></div>
+            <div class="ornament"></div>
+            <div class="ornament"></div>
+            <div class="ornament"></div>
+            <div class="garland"></div>
+            <div class="garland"></div>
+            <div class="garland"></div>
+            <div class="garland"></div>
+        </div>
+        <div class="tree-part">
+            <div class="ornament"></div>
+            <div class="ornament"></div>
+            <div class="ornament"></div>
+            <div class="ornament"></div>
+        </div>
+        <div class="tree-part">
+            <div class="ornament"></div>
+            <div class="ornament"></div>
+            <div class="ornament"></div>
+        </div>
+        <div class="trunk"></div>
+    </div>
+</body>
+</html> 

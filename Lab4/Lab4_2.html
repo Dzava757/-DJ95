@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hourglass {
+            position: relative;
+            width: 80px;
+            height: 120px;
+            margin: 50px auto;
+            border: 4px solid #333;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: visible;
+        }
+
+        /* Верхняя и нижняя части */
+        .hourglass::before,
+        .hourglass::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 80px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .hourglass::before {
+            top: 0;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+
+        .hourglass::after {
+            bottom: 0;
+            clip-path: polygon(50% 0, 0 100%, 100% 100%);
+        }
+
+        /* Песок в верхней части */
+        .sand-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 60px;
+            background-color: #daa520;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            animation: sand-flow-top 6s linear infinite;
+            transform-origin: bottom center;
+        }
+
+        /* Песок в нижней части */
+        .sand-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 60px;
+            background-color: #daa520;
+            clip-path: polygon(50% 0, 0 100%, 100% 100%);
+            animation: sand-flow-bottom 6s linear infinite;
+            transform-origin: top center;
+        }
+
+        /* Падающие частицы */
+        .sand-particles {
+            position: absolute;
+            width: 100%;
+            height: 200px;
+            top: 60px;
+            left: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #daa520;
+            border-radius: 50%;
+        }
+
+        /* Создаем множество частиц с разными анимациями */
+        .particle:nth-child(1) { animation: particle1 6s infinite; }
+        .particle:nth-child(2) { animation: particle2 6s infinite; left: 20px; }
+        .particle:nth-child(3) { animation: particle3 6s infinite; left: 40px; }
+        .particle:nth-child(4) { animation: particle4 6s infinite; left: 60px; }
+        .particle:nth-child(5) { animation: particle5 6s infinite; left: 80px; }
+
+        @keyframes sand-flow-top {
+            0% { transform: scaleY(1); }
+            40% { transform: scaleY(0); }
+            80% { transform: scaleY(0); }
+            90% { transform: scaleY(1); }
+            100% { transform: scaleY(1); }
+        }
+
+        @keyframes sand-flow-bottom {
+            0% { transform: scaleY(0); }
+            40% { transform: scaleY(1); }
+            50% { transform: scaleY(0); }
+            90% { transform: scaleY(0); }
+            100% { transform: scaleY(0); }
+        }
+
+        @keyframes particle1 {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            40% { transform: translateY(120px) translateX(40px); opacity: 1; }
+            50% { transform: translateY(140px) translateX(60px); opacity: 0; }
+            60% { transform: translateY(140px) translateX(-60px); opacity: 0; }
+            70% { transform: translateY(-20px) translateX(-40px); opacity: 1; }
+            80% { transform: translateY(-40px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0; }
+        }
+
+        @keyframes particle2 {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            40% { transform: translateY(120px) translateX(-30px); opacity: 1; }
+            50% { transform: translateY(140px) translateX(-50px); opacity: 0; }
+            60% { transform: translateY(140px) translateX(50px); opacity: 0; }
+            70% { transform: translateY(-20px) translateX(30px); opacity: 1; }
+            80% { transform: translateY(-40px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0; }
+        }
+
+        @keyframes particle3 {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            40% { transform: translateY(120px) translateX(20px); opacity: 1; }
+            50% { transform: translateY(140px) translateX(40px); opacity: 0; }
+            60% { transform: translateY(140px) translateX(-40px); opacity: 0; }
+            70% { transform: translateY(-20px) translateX(-20px); opacity: 1; }
+            80% { transform: translateY(-40px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0; }
+        }
+
+        @keyframes particle4 {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            40% { transform: translateY(120px) translateX(-20px); opacity: 1; }
+            50% { transform: translateY(140px) translateX(-30px); opacity: 0; }
+            60% { transform: translateY(140px) translateX(30px); opacity: 0; }
+            70% { transform: translateY(-20px) translateX(20px); opacity: 1; }
+            80% { transform: translateY(-40px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0; }
+        }
+
+        @keyframes particle5 {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            40% { transform: translateY(120px) translateX(30px); opacity: 1; }
+            50% { transform: translateY(140px) translateX(20px); opacity: 0; }
+            60% { transform: translateY(140px) translateX(-20px); opacity: 0; }
+            70% { transform: translateY(-20px) translateX(-30px); opacity: 1; }
+            80% { transform: translateY(-40px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hourglass">
+        <div class="sand-top"></div>
+        <div class="sand-bottom"></div>
+        <div class="sand-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+    </div>
+</body>
+</html>
