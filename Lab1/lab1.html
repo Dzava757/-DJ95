@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript - Язык программирования</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>JavaScript - Язык программирования</h1>
+        <nav>
+            <ul class="contents">
+                <li><a href="#history">История создания</a></li>
+                <li><a href="#overview">Краткий обзор</a></li>
+                <li><a href="#examples">Примеры кода</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="history">
+            <h2>История создания</h2>
+            <img src="js-logo.png" alt="JavaScript Logo" class="image-left">
+            <p>JavaScript был создан Бренданом Эйхом за 10 дней в мае 1995 года. Изначально язык назывался Mocha, затем был переименован в LiveScript, и наконец стал называться JavaScript. Несмотря на схожесть названий, JavaScript не является прямым потомком языка Java - имя было выбрано в маркетинговых целях, так как Java был очень популярен в то время.</p>
+            <table class="history-table">
+                <tr>
+                    <th>Год</th>
+                    <th>Версия</th>
+                    <th>Основные изменения</th>
+                </tr>
+                <tr>
+                    <td>1995</td>
+                    <td>JavaScript 1.0</td>
+                    <td>Первый релиз</td>
+                </tr>
+                <tr>
+                    <td>1997</td>
+                    <td>ECMAScript 1</td>
+                    <td>Первая стандартизация</td>
+                </tr>
+                <tr>
+                    <td>2015</td>
+                    <td>ECMAScript 6</td>
+                    <td>Классы, стрелочные функции, промисы</td>
+                </tr>
+                <tr>
+                    <td>2023</td>
+                    <td>ECMAScript 2023</td>
+                    <td>Современные возможности</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="overview">
+            <h2>Краткий обзор</h2>
+            <img src="js-code.png" alt="JavaScript Code" class="image-center">
+            <p>JavaScript - это мультипарадигменный язык программирования, поддерживающий объектно-ориентированный, императивный и функциональный стили. Является основным языком для веб-разработки, позволяющим создавать интерактивные веб-страницы.</p>
+            
+            <h3>Основные преимущества:</h3>
+            <ul class="custom-list">
+                <li>Универсальность и гибкость</li>
+                <li>Огромная экосистема npm</li>
+                <li>Поддержка всеми браузерами</li>
+                <li>Асинхронное программирование</li>
+                <li>Активное сообщество</li>
+            </ul>
+
+            <h3>Области применения:</h3>
+            <ol>
+                <li>Фронтенд-разработка</li>
+                <li>Серверная разработка (Node.js)</li>
+                <li>Мобильная разработка (React Native)</li>
+                <li>Десктопные приложения (Electron)</li>
+                <li>Игровая разработка</li>
+            </ol>
+        </section>
+
+        <section id="examples">
+            <h2>Примеры кода</h2>
+            <img src="js-ide.png" alt="JavaScript IDE" class="image-right">
+            <pre class="code-highlight">
+<code>
+// Современный JavaScript
+const greeting = (name) => {
+    return `Привет, ${name}!`;
+};
+
+class User {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    sayHello() {
+        console.log(greeting(this.name));
+    }
+}
+
+// Асинхронный код
+async function fetchData() {
+    try {
+        const response = await fetch('api/data');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
+}
+</code>
+            </pre>
+        </section>
+    </main>
+
+    <footer>
+        <h3>Использованные теги:</h3>
+        <ul class="tags-list">
+            <li>Структурные теги:</li>
+            <li>&lt;!DOCTYPE&gt;, &lt;html&gt;, &lt;head&gt;, &lt;body&gt;, &lt;header&gt;, &lt;main&gt;, &lt;footer&gt;, &lt;section&gt;, &lt;nav&gt;</li>
+            
+            <li>Метаданные:</li>
+            <li>&lt;meta&gt;, &lt;title&gt;, &lt;link&gt;</li>
+            
+            <li>Текстовые элементы:</li>
+            <li>&lt;h1&gt;, &lt;h2&gt;, &lt;h3&gt;, &lt;p&gt;, &lt;pre&gt;, &lt;code&gt;</li>
+            
+            <li>Списки:</li>
+            <li>&lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;</li>
+            
+            <li>Таблицы:</li>
+            <li>&lt;table&gt;, &lt;tr&gt;, &lt;th&gt;, &lt;td&gt;</li>
+            
+            <li>Ссылки и медиа:</li>
+            <li>&lt;a&gt;, &lt;img&gt;</li>
+        </ul>
+
+        <h3>Использованные CSS-свойства:</h3>
+        <ul class="tags-list">
+            <li>Шрифты и текст:</li>
+            <li>font-family, font-size, line-height, color, text-align, text-decoration</li>
+            
+            <li>Размеры и отступы:</li>
+            <li>width, max-width, margin, padding, border-radius</li>
+            
+            <li>Цвета и фон:</li>
+            <li>color, background-color</li>
+            
+            <li>Позиционирование:</li>
+            <li>display, float, position</li>
+            
+            <li>Таблицы:</li>
+            <li>border-collapse, border</li>
+            
+            <li>Списки:</li>
+            <li>list-style-type, list-style-image</li>
+            
+            <li>Трансформации и переходы:</li>
+            <li>transition</li>
+            
+            <li>Медиа-запросы:</li>
+            <li>@media</li>
+            
+            <li>Колонки:</li>
+            <li>columns</li>
+            
+            <li>Шрифты:</li>
+            <li>@font-face</li>
+        </ul>
+    </footer>
+</body>
+</html> 
