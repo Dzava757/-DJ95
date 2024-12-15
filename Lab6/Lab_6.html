@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа</title>
+    <style>
+        .order-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        input.error, select.error, textarea.error {
+            border-color: red;
+        }
+
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            label {
+                display: none;
+            }
+
+            input, select, textarea {
+                margin-bottom: 10px;
+            }
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-group label {
+            display: inline-block;
+            margin: 0;
+        }
+
+        /* Для мобильной версии */
+        @media (max-width: 768px) {
+            .checkbox-group label {
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form class="order-form" id="orderForm">
+        <h2>Оформление заказа</h2>
+        
+        <div class="form-group">
+            <label for="fullname">ФИО</label>
+            <input type="text" id="fullname" name="fullname" placeholder="Введите ФИО" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Введите email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input type="tel" id="phone" name="phone" placeholder="Введите телефон" required>
+        </div>
+
+        <div class="form-group">
+            <label for="delivery">Способ доставки</label>
+            <select id="delivery" name="delivery" required>
+                <option value="">Выберите способ доставки</option>
+                <option value="courier">Курьером</option>
+                <option value="pickup">Самовывоз</option>
+                <option value="post">Почтой России</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Адрес доставки</label>
+            <textarea id="address" name="address" placeholder="Введите адрес доставки" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="size">Размер</label>
+            <input type="number" id="size" name="size" min="40" max="60" placeholder="Введите размер" required>
+        </div>
+
+        <div class="form-group">
+            <label for="color">Цвет</label>
+            <input type="color" id="color" name="color">
+        </div>
+
+        <div class="form-group">
+            <label for="delivery-date">Предпочтительная дата доставки</label>
+            <input type="date" id="delivery-date" name="delivery-date" required>
+        </div>
+
+        <div class="form-group checkbox-group">
+            <input type="checkbox" id="agreement" name="agreement" required>
+            <label for="agreement">Согласен с условиями доставки</label>
+        </div>
+
+        <button type="submit" class="submit-btn">Оформить заказ</button>
+    </form>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Очищаем предыдущие ошибки
+            clearErrors();
+            
+            let isValid = true;
+            const formData = {};
+
+            // Валидация ФИО
+            const fullname = document.getElementById('fullname');
+            if (!fullname.value.trim()) {
+                showError(fullname, 'ФИО обязательно для заполнения');
+                isValid = false;
+            } else if (!/^[а-яА-ЯёЁ\s]{2,}$/i.test(fullname.value.trim())) {
+                showError(fullname, 'ФИО должно содержать только русские буквы');
+                isValid = false;
+            } else {
+                formData.fullname = fullname.value.trim();
+            }
+
+            // Валидация Email
+            const email = document.getElementById('email');
+            if (!email.value.trim()) {
+                showError(email, 'Email обязателен для заполнения');
+                isValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+                showError(email, 'Введите корректный email');
+                isValid = false;
+            } else {
+                formData.email = email.value.trim();
+            }
+
+            // Валидация телефона
+            const phone = document.getElementById('phone');
+            if (!phone.value.trim()) {
+                showError(phone, 'Телефон обязателен для заполнения');
+                isValid = false;
+            } else if (!/^\+?[0-9]{11}$/.test(phone.value.trim())) {
+                showError(phone, 'Введите корректный номер телефона (11 цифр)');
+                isValid = false;
+            } else {
+                formData.phone = phone.value.trim();
+            }
+
+            // Валидация размера
+            const size = document.getElementById('size');
+            if (!size.value) {
+                showError(size, 'Размер обязателен для заполнения');
+                isValid = false;
+            } else if (size.value < 40 || size.value > 60) {
+                showError(size, 'Размер должен быть от 40 до 60');
+                isValid = false;
+            } else {
+                formData.size = size.value;
+            }
+
+            // Проверка остальных обязательных полей
+            ['delivery', 'address', 'delivery-date', 'agreement'].forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value && field.type !== 'checkbox') {
+                    showError(field, 'Поле обязательно для заполнения');
+                    isValid = false;
+                } else if (field.type === 'checkbox' && !field.checked) {
+                    showError(field, 'Необходимо согласие с условиями');
+                    isValid = false;
+                } else {
+                    formData[fieldId] = field.type === 'checkbox' ? field.checked : field.value;
+                }
+            });
+
+            // Если форма валидна
+            if (isValid) {
+                // Отображаем результат
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `
+                    <h3>Данные заказа:</h3>
+                    <p>ФИО: ${formData.fullname}</p>
+                    <p>Email: ${formData.email}</p>
+                    <p>Телефон: ${formData.phone}</p>
+                    <p>Способ доставки: ${formData.delivery}</p>
+                    <p>Адрес: ${formData.address}</p>
+                    <p>Размер: ${formData.size}</p>
+                    <p>Цвет: ${document.getElementById('color').value}</p>
+                    <p>Дата доставки: ${formData['delivery-date']}</p>
+                `;
+
+                // Очищаем форму
+                this.reset();
+            }
+        });
+
+        function showError(element, message) {
+            element.classList.add('error');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            element.parentNode.appendChild(errorDiv);
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(error => error.remove());
+            document.querySelectorAll('.error').forEach(element => element.classList.remove('error'));
+        }
+    </script>
+</body>
+</html>

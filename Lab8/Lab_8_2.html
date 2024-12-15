@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Календарь</title>
+    <style>
+        .calendar {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+
+        .weekday {
+            font-weight: bold;
+            padding: 10px;
+            background: #f0f0f0;
+        }
+
+        .day {
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+
+        .weekend {
+            background-color: #ffebee;
+            color: #e53935;
+        }
+
+        .holiday {
+            background-color: #e8f5e9;
+            color: #43a047;
+        }
+
+        .other-month {
+            color: #ccc;
+        }
+
+        button {
+            padding: 5px 10px;
+            border: none;
+            background: #2196f3;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar" id="calendar"></div>
+
+    <script>
+        // Праздничные дни (месяц, день)
+        const holidays = [
+            { month: 1, day: 1 },  // Новый год
+            { month: 1, day: 7 },  // Рождество
+            { month: 2, day: 23 }, // День защитника Отечества
+            { month: 3, day: 8 },  // Международный женский день
+            { month: 5, day: 1 },  // Праздник Весны и Труда
+            { month: 5, day: 9 },  // День Победы
+            { month: 6, day: 12 }, // День России
+            { month: 11, day: 4 }, // День народного единства
+        ];
+
+        function createCalendar(year = new Date().getFullYear(), month = new Date().getMonth() + 1) {
+            const calendarElement = document.getElementById('calendar');
+            const date = new Date(year, month - 1);
+            const monthName = date.toLocaleString('ru', { month: 'long' });
+
+            // Создаем заголовок календаря
+            const header = `
+                <div class="calendar-header">
+                    <button onclick="prevMonth()">&lt;</button>
+                    <h2>${monthName} ${year}</h2>
+                    <button onclick="nextMonth()">&gt;</button>
+                </div>
+            `;
+
+            // Создаем сетку дней недели
+            const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            let grid = '<div class="calendar-grid">';
+            
+            // Добавляем заголовки дней недели
+            weekdays.forEach(day => {
+                grid += `<div class="weekday">${day}</div>`;
+            });
+
+            // Получаем первый день месяца
+            const firstDay = new Date(year, month - 1, 1);
+            let startDay = firstDay.getDay() || 7; // Преобразуем 0 (воскресенье) в 7
+            startDay--; // Корректируем для начала недели с понедельника
+
+            // Получаем последний день месяца
+            const lastDay = new Date(year, month, 0).getDate();
+
+            // Добавляем пустые ячейки до первого дня месяца
+            for (let i = 0; i < startDay; i++) {
+                const prevMonthLastDay = new Date(year, month - 1, 0).getDate();
+                grid += `<div class="day other-month">${prevMonthLastDay - startDay + i + 1}</div>`;
+            }
+
+            // Добавляем дни месяца
+            for (let day = 1; day <= lastDay; day++) {
+                const currentDate = new Date(year, month - 1, day);
+                const isWeekend = currentDate.getDay() === 0 || currentDate.getDay() === 6;
+                const isHoliday = holidays.some(h => h.month === month && h.day === day);
+                
+                let classes = 'day';
+                if (isWeekend) classes += ' weekend';
+                if (isHoliday) classes += ' holiday';
+
+                grid += `<div class="${classes}">${day}</div>`;
+            }
+
+            // Добавляем пустые ячейки после последнего дня месяца
+            const remainingDays = 42 - (startDay + lastDay); // 42 = 6 недель * 7 дней
+            for (let i = 1; i <= remainingDays; i++) {
+                grid += `<div class="day other-month">${i}</div>`;
+            }
+
+            grid += '</div>';
+            calendarElement.innerHTML = header + grid;
+        }
+
+        // Глобальные переменные для текущего месяца и года
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth() + 1;
+
+        // Функции для переключения месяцев
+        function prevMonth() {
+            currentMonth--;
+            if (currentMonth < 1) {
+                currentMonth = 12;
+                currentYear--;
+            }
+            createCalendar(currentYear, currentMonth);
+        }
+
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 12) {
+                currentMonth = 1;
+                currentYear++;
+            }
+            createCalendar(currentYear, currentMonth);
+        }
+
+        // Создаем календарь на текущий месяц при загрузке страницы
+        createCalendar();
+    </script>
+</body>
+</html>
