@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор</title>
+    <style>
+        .calculator {
+            width: 300px;
+            margin: 50px auto;
+            background-color: #1e3d59;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border: 2px solid #17314a;
+        }
+
+        #display {
+            width: 100%;
+            height: 50px;
+            margin-bottom: 20px;
+            text-align: right;
+            padding: 10px;
+            font-size: 24px;
+            border: none;
+            background-color: #143d1e; /* Темно-зеленый фон дисплея */
+            border-radius: 5px;
+            color: #39FF14; /* Ярко-зеленый цвет цифр */
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+            font-family: 'Digital-7', monospace;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4a90e2;
+            color: white;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            background-color: #357abd;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .operator {
+            background-color: #2c5282;
+        }
+
+        .operator:hover {
+            background-color: #1a365d;
+        }
+
+        .equals {
+            background-color: #0056b3;
+            font-weight: bold;
+        }
+
+        .equals:hover {
+            background-color: #003d82;
+        }
+
+        .clear, .off-btn {
+            background-color: #c53030;
+        }
+
+        .clear:hover, .off-btn:hover {
+            background-color: #9b2c2c;
+        }
+
+        .memory {
+            background-color: #3182ce;
+        }
+
+        .memory:hover {
+            background-color: #2b6cb0;
+        }
+
+        .buttons button:nth-child(-n+4) {
+            background-color: #2b4f76;
+            border-bottom: 2px solid #1a365d;
+        }
+
+        .buttons button:nth-child(-n+4):hover {
+            background-color: #1e3d59;
+        }
+
+        button:nth-child(n+9):nth-child(-n+19):not(.operator) {
+            background-color: #5a9bd5;
+        }
+
+        button:nth-child(n+9):nth-child(-n+19):not(.operator):hover {
+            background-color: #4a90e2;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" readonly>
+        <div class="buttons">
+            <button class="double-function clear" onclick="handleClearCE()">C/CE</button>
+            <button class="off-btn" onclick="turnOff()">OFF</button>
+            <button class="operator" onclick="appendOperation('sqrt')">√</button>
+            <button class="operator" onclick="appendOperation('%')">%</button>
+
+            <button class="memory" onclick="memoryRecall()">MRC</button>
+            <button class="memory" onclick="memorySubtract()">M-</button>
+            <button class="memory" onclick="memoryAdd()">M+</button>
+            <button class="operator" onclick="appendOperation('/')">/</button>
+
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button class="operator" onclick="appendOperation('*')">×</button>
+
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button class="operator" onclick="appendOperation('-')">-</button>
+
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button class="operator" onclick="appendOperation('+')">+</button>
+
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="appendNumber('.')">.</button>
+            <button onclick="toggleSign()">±</button>
+            <button class="equals" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let currentNumber = '';
+        let previousNumber = '';
+        let operation = null;
+        let shouldResetDisplay = false;
+        let memoryValue = 0;
+        let isOff = false;
+
+        function appendNumber(num) {
+            if (isOff) return;
+            if (display.value === "Деление на ноль невозможно" || 
+                display.value === "Корень из отрицательного числа невозможен" ||
+                display.value === "Результат слишком большой") {
+                display.value = '';
+            }
+            if (shouldResetDisplay) {
+                display.value = '';
+                shouldResetDisplay = false;
+            }
+            if (num === '.' && display.value.includes('.')) return;
+            display.value += num;
+            currentNumber = display.value;
+        }
+
+        function appendOperation(op) {
+            if (isOff) return;
+            if (display.value === "Деление на ноль невозможно" || 
+                display.value === "Корень из отрицательного числа невозможен" ||
+                display.value === "Результат слишком большой") {
+                return;
+            }
+            if (currentNumber === '') return;
+
+            if (previousNumber !== '') {
+                calculate();
+            }
+
+            previousNumber = currentNumber;
+            operation = op;
+            shouldResetDisplay = true;
+
+            if (op === 'sqrt') {
+                calculate();
+            }
+        }
+
+        function calculate() {
+            if (isOff) return;
+            if (operation === null || previousNumber === '') return;
+
+            let result;
+            const prev = parseFloat(previousNumber);
+            const current = parseFloat(currentNumber);
+
+            try {
+                switch(operation) {
+                    case '+':
+                        result = prev + current;
+                        break;
+                    case '-':
+                        result = prev - current;
+                        break;
+                    case '*':
+                        result = prev * current;
+                        break;
+                    case '/':
+                        if (current === 0) {
+                            throw new Error("Деление на ноль невозможно");
+                        }
+                        result = prev / current;
+                        break;
+                    case '%':
+                        result = prev * (current / 100);
+                        break;
+                    case 'sqrt':
+                        if (prev < 0) {
+                            throw new Error("Корень из отрицательного числа невозможен");
+                        }
+                        result = Math.sqrt(prev);
+                        break;
+                }
+
+                if (!isFinite(result)) {
+                    throw new Error("Результат слишком большой");
+                }
+
+                display.value = result;
+                currentNumber = result.toString();
+                previousNumber = '';
+                operation = null;
+                shouldResetDisplay = true;
+            } catch (error) {
+                display.value = error.message;
+                currentNumber = '';
+                previousNumber = '';
+                operation = null;
+                shouldResetDisplay = true;
+            }
+        }
+
+        function clearEntry() {
+            if (isOff) return;
+            display.value = '';
+            currentNumber = '';
+        }
+
+        function clearAll() {
+            if (isOff) return;
+            display.value = '';
+            currentNumber = '';
+            previousNumber = '';
+            operation = null;
+        }
+
+        let clearCount = 0;
+        let clearTimeout;
+
+        function handleClearCE() {
+            if (isOff) return;
+            clearCount++;
+            
+            if (clearCount === 1) {
+                clearEntry();
+                clearTimeout = setTimeout(() => {
+                    clearCount = 0;
+                }, 300);
+            } else if (clearCount === 2) {
+                clearAll();
+                clearCount = 0;
+                clearTimeout && clearTimeout(clearTimeout);
+            }
+        }
+
+        function toggleSign() {
+            if (isOff) return;
+            if (display.value === '') return;
+            display.value = (-parseFloat(display.value)).toString();
+            currentNumber = display.value;
+        }
+
+        function memoryAdd() {
+            if (isOff) return;
+            if (display.value) {
+                memoryValue += parseFloat(display.value);
+            }
+        }
+
+        function memorySubtract() {
+            if (isOff) return;
+            if (display.value) {
+                memoryValue -= parseFloat(display.value);
+            }
+        }
+
+        function memoryRecall() {
+            if (isOff) return;
+            display.value = memoryValue.toString();
+            currentNumber = display.value;
+        }
+
+        function turnOff() {
+            if (isOff) {
+                // Включаем
+                isOff = false;
+                display.style.backgroundColor = '#143d1e';
+                display.style.color = '#39FF14';
+                clearAll();
+            } else {
+                // Выключаем
+                isOff = true;
+                display.style.backgroundColor = '#0a1f0f';
+                display.style.color = '#143d1e';
+                display.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
